@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 09, 2020 lúc 05:07 AM
+-- Thời gian đã tạo: Th1 09, 2020 lúc 06:36 PM
 -- Phiên bản máy phục vụ: 10.4.10-MariaDB
 -- Phiên bản PHP: 7.3.12
 
@@ -68,7 +68,7 @@ DELIMITER ;
 CREATE TABLE `giangvien` (
   `idgiangvien` int(11) NOT NULL,
   `idkhoa` int(11) NOT NULL,
-  `ten` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tengv` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ngaysinh` date NOT NULL,
   `sdt` int(11) NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
@@ -78,7 +78,7 @@ CREATE TABLE `giangvien` (
 -- Đang đổ dữ liệu cho bảng `giangvien`
 --
 
-INSERT INTO `giangvien` (`idgiangvien`, `idkhoa`, `ten`, `ngaysinh`, `sdt`, `email`) VALUES
+INSERT INTO `giangvien` (`idgiangvien`, `idkhoa`, `tengv`, `ngaysinh`, `sdt`, `email`) VALUES
 (7, 2, 'Nguyễn Văn Nam', '1990-01-24', 981453628, 'nam@tlu.edu.vn');
 
 -- --------------------------------------------------------
@@ -165,10 +165,13 @@ CREATE TABLE `sinhvien` (
 --
 
 INSERT INTO `sinhvien` (`idsinhvien`, `idkhoa`, `idlop`, `masv`, `ten`, `gioitinh`, `ngaysinh`, `quequan`) VALUES
-(1, 1, 1, ' SVCNTT01', 'Hoàng Thế Anh', 'Bê Đê', '1999-12-24', ' Nghệ An'),
+(1, 1, 1, ' SVCNTT01', 'Hoàng Thế Anh', 'Gay', '1999-12-24', ' Nghệ An'),
 (2, 1, 1, 'SVCNTT02', 'Trương Vương Quát', 'nam', '1999-12-18', 'Bắc Ninh'),
-(3, 1, 1, 'SVCNTT03', 'Nguyễn Thành Dự', 'Nam', '1996-12-18', 'Nam Định'),
-(4, 1, 1, 'SVCNTT04', 'Đỗ Cảnh Dương', 'Nam', '1995-08-16', 'Nam Định');
+(4, 1, 1, 'SVCNTT04', 'Đỗ Cảnh Dương', 'Nam', '1995-08-16', 'Nam Định'),
+(15, 2, 3, 'SVCNTT06', 'Lê Văn Bắc', 'Nữ', '1999-07-07', 'Thường Tín'),
+(18, 1, 2, 'SVCNTT07', 'Phạm Thế Sơn', 'Nam', '1999-07-07', 'Nam Định'),
+(19, 2, 3, 'SVKT01', 'Vũ Tiến Thành', 'Nam', '1998-01-01', 'Nam Định'),
+(20, 1, 2, 'SVCNTT08', 'Nguyễn Khắc Diêm', 'Nam', '1999-11-11', 'Thái Bình');
 
 -- --------------------------------------------------------
 
@@ -349,7 +352,7 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT cho bảng `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `idsinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idsinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT cho bảng `user`
