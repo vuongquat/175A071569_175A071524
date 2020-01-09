@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 08, 2020 lúc 06:26 AM
+-- Thời gian đã tạo: Th1 09, 2020 lúc 05:07 AM
 -- Phiên bản máy phục vụ: 10.4.10-MariaDB
 -- Phiên bản PHP: 7.3.12
 
@@ -118,7 +118,9 @@ CREATE TABLE `lop` (
 --
 
 INSERT INTO `lop` (`idlop`, `idkhoa`, `tenlop`) VALUES
-(1, 1, 'CNTT01');
+(1, 1, 'CNTT01'),
+(2, 1, 'CNTT02'),
+(3, 2, 'KT01');
 
 -- --------------------------------------------------------
 
@@ -163,10 +165,98 @@ CREATE TABLE `sinhvien` (
 --
 
 INSERT INTO `sinhvien` (`idsinhvien`, `idkhoa`, `idlop`, `masv`, `ten`, `gioitinh`, `ngaysinh`, `quequan`) VALUES
-(1, 1, 1, 'SVCNTT01', 'Hoàng Thế Anh', 'Nam', '1999-12-24', 'Nghệ An'),
+(1, 1, 1, ' SVCNTT01', 'Hoàng Thế Anh', 'Bê Đê', '1999-12-24', ' Nghệ An'),
 (2, 1, 1, 'SVCNTT02', 'Trương Vương Quát', 'nam', '1999-12-18', 'Bắc Ninh'),
 (3, 1, 1, 'SVCNTT03', 'Nguyễn Thành Dự', 'Nam', '1996-12-18', 'Nam Định'),
 (4, 1, 1, 'SVCNTT04', 'Đỗ Cảnh Dương', 'Nam', '1995-08-16', 'Nam Định');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc đóng vai cho view `thongtinlopkhoa`
+-- (See below for the actual view)
+--
+CREATE TABLE `thongtinlopkhoa` (
+`idlop` int(11)
+,`tenlop` varchar(255)
+,`idkhoa` int(11)
+,`tenkhoa` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc đóng vai cho view `thongtinsinhvien`
+-- (See below for the actual view)
+--
+CREATE TABLE `thongtinsinhvien` (
+`idsinhvien` int(11)
+,`ten` varchar(255)
+,`masv` varchar(255)
+,`ngaysinh` date
+,`gioitinh` varchar(255)
+,`quequan` varchar(255)
+,`tenlop` varchar(255)
+,`tenkhoa` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc đóng vai cho view `tracuudiem`
+-- (See below for the actual view)
+--
+CREATE TABLE `tracuudiem` (
+`idsinhvien` int(11)
+,`ten` varchar(255)
+,`masv` varchar(255)
+,`tenmon` varchar(255)
+,`hocky` int(11)
+,`diemquatrinh` float
+,`diemthi` float
+,`diemtongket` float
+,`diemchu` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `user`
+--
+
+CREATE TABLE `user` (
+  `iduser` int(11) NOT NULL,
+  `usernam` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `level` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc cho view `thongtinlopkhoa`
+--
+DROP TABLE IF EXISTS `thongtinlopkhoa`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `thongtinlopkhoa`  AS  select `lop`.`idlop` AS `idlop`,`lop`.`tenlop` AS `tenlop`,`khoa`.`idkhoa` AS `idkhoa`,`khoa`.`tenkhoa` AS `tenkhoa` from (`lop` left join `khoa` on(`lop`.`idkhoa` = `khoa`.`idkhoa`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc cho view `thongtinsinhvien`
+--
+DROP TABLE IF EXISTS `thongtinsinhvien`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `thongtinsinhvien`  AS  select `sinhvien`.`idsinhvien` AS `idsinhvien`,`sinhvien`.`ten` AS `ten`,`sinhvien`.`masv` AS `masv`,`sinhvien`.`ngaysinh` AS `ngaysinh`,`sinhvien`.`gioitinh` AS `gioitinh`,`sinhvien`.`quequan` AS `quequan`,`lop`.`tenlop` AS `tenlop`,`khoa`.`tenkhoa` AS `tenkhoa` from ((`sinhvien` left join `lop` on(`sinhvien`.`idlop` = `lop`.`idlop`)) left join `khoa` on(`sinhvien`.`idkhoa` = `khoa`.`idkhoa`)) ;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc cho view `tracuudiem`
+--
+DROP TABLE IF EXISTS `tracuudiem`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tracuudiem`  AS  select `sinhvien`.`idsinhvien` AS `idsinhvien`,`sinhvien`.`ten` AS `ten`,`sinhvien`.`masv` AS `masv`,`monhoc`.`tenmon` AS `tenmon`,`monhoc`.`hocky` AS `hocky`,`diem`.`diemquatrinh` AS `diemquatrinh`,`diem`.`diemthi` AS `diemthi`,`diem`.`diemtongket` AS `diemtongket`,`diem`.`diemchu` AS `diemchu` from ((`sinhvien` left join `diem` on(`sinhvien`.`idsinhvien` = `diem`.`idsinhvien`)) left join `monhoc` on(`monhoc`.`idmon` = `diem`.`idmon`)) ;
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -216,6 +306,12 @@ ALTER TABLE `sinhvien`
   ADD KEY `idlop` (`idlop`);
 
 --
+-- Chỉ mục cho bảng `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`iduser`);
+
+--
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
 
@@ -241,7 +337,7 @@ ALTER TABLE `khoa`
 -- AUTO_INCREMENT cho bảng `lop`
 --
 ALTER TABLE `lop`
-  MODIFY `idlop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idlop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `monhoc`
@@ -253,7 +349,13 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT cho bảng `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `idsinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idsinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT cho bảng `user`
+--
+ALTER TABLE `user`
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
