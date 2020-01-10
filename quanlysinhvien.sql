@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 09, 2020 lúc 06:36 PM
+-- Thời gian đã tạo: Th1 10, 2020 lúc 11:31 AM
 -- Phiên bản máy phục vụ: 10.4.10-MariaDB
 -- Phiên bản PHP: 7.3.12
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `diem` (
+  `iddiem` int(11) NOT NULL,
   `idmon` int(11) NOT NULL,
   `idsinhvien` int(11) NOT NULL,
   `diemquatrinh` float NOT NULL,
@@ -41,14 +42,39 @@ CREATE TABLE `diem` (
 -- Đang đổ dữ liệu cho bảng `diem`
 --
 
-INSERT INTO `diem` (`idmon`, `idsinhvien`, `diemquatrinh`, `diemthi`, `diemtongket`, `diemchu`) VALUES
-(3, 1, 5, 4, 4.4, 'D');
+INSERT INTO `diem` (`iddiem`, `idmon`, `idsinhvien`, `diemquatrinh`, `diemthi`, `diemtongket`, `diemchu`) VALUES
+(1, 3, 1, 10, 6, 7.6, 'B'),
+(2, 3, 2, 10, 10, 10, 'A'),
+(3, 4, 4, 5, 7, 6.2, 'C'),
+(4, 4, 15, 5, 10, 8, 'B'),
+(5, 4, 18, 8, 10, 9.2, 'A'),
+(6, 4, 19, 8, 9, 8.6, 'A'),
+(7, 4, 2, 10, 10, 10, 'A'),
+(10, 4, 20, 10, 8, 8.8, 'A'),
+(11, 3, 27, 10, 10, 10, 'A'),
+(13, 4, 1, 5, 10, 8, 'B'),
+(15, 3, 28, 4.5, 6.5, 5.7, 'C'),
+(16, 3, 4, 7.5, 9, 8.4, 'B'),
+(17, 4, 15, 10, 1, 4.6, 'D'),
+(20, 5, 1, 1, 1, 1, 'F'),
+(21, 5, 29, 10, 5, 7, 'B');
 
 --
 -- Bẫy `diem`
 --
 DELIMITER $$
 CREATE TRIGGER `Inert_Diem` BEFORE INSERT ON `diem` FOR EACH ROW SET NEW.diemtongket = NEW.diemquatrinh * 0.4 + NEW.diemthi * 0.6,
+NEW.diemchu = CASE
+WHEN NEW.diemtongket >= 4 AND NEW.diemtongket < 5.5 THEN "D"
+WHEN NEW.diemtongket >= 5.5 AND NEW.diemtongket < 7 THEN "C"
+WHEN NEW.diemtongket >= 7 AND NEW.diemtongket < 8.5 THEN "B"
+WHEN NEW.diemtongket >= 8.5 AND NEW.diemtongket <= 10 THEN "A"
+ELSE "F"
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `Update_Diem` BEFORE UPDATE ON `diem` FOR EACH ROW SET NEW.diemtongket = NEW.diemquatrinh * 0.4 + NEW.diemthi * 0.6,
 NEW.diemchu = CASE
 WHEN NEW.diemtongket >= 4 AND NEW.diemtongket < 5.5 THEN "D"
 WHEN NEW.diemtongket >= 5.5 AND NEW.diemtongket < 7 THEN "C"
@@ -70,7 +96,7 @@ CREATE TABLE `giangvien` (
   `idkhoa` int(11) NOT NULL,
   `tengv` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ngaysinh` date NOT NULL,
-  `sdt` int(11) NOT NULL,
+  `sdt` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -79,7 +105,8 @@ CREATE TABLE `giangvien` (
 --
 
 INSERT INTO `giangvien` (`idgiangvien`, `idkhoa`, `tengv`, `ngaysinh`, `sdt`, `email`) VALUES
-(7, 2, 'Nguyễn Văn Nam', '1990-01-24', 981453628, 'nam@tlu.edu.vn');
+(7, 2, 'Nguyễn Văn Nam', '1990-01-24', '0981453628', 'nam@tlu.edu.vn'),
+(8, 1, 'Nguyễn Thị Hương', '1988-05-02', '0984125369', 'huong@tlu.edu.vn');
 
 -- --------------------------------------------------------
 
@@ -141,7 +168,9 @@ CREATE TABLE `monhoc` (
 --
 
 INSERT INTO `monhoc` (`idmon`, `idgiangvien`, `tenmon`, `sotinchi`, `hocky`) VALUES
-(3, 7, 'Toán 1', 3, 1);
+(3, 7, 'Toán 1', 3, 1),
+(4, 7, 'Toán 2', 3, 2),
+(5, 7, 'Toán 3', 3, 2);
 
 -- --------------------------------------------------------
 
@@ -171,7 +200,29 @@ INSERT INTO `sinhvien` (`idsinhvien`, `idkhoa`, `idlop`, `masv`, `ten`, `gioitin
 (15, 2, 3, 'SVCNTT06', 'Lê Văn Bắc', 'Nữ', '1999-07-07', 'Thường Tín'),
 (18, 1, 2, 'SVCNTT07', 'Phạm Thế Sơn', 'Nam', '1999-07-07', 'Nam Định'),
 (19, 2, 3, 'SVKT01', 'Vũ Tiến Thành', 'Nam', '1998-01-01', 'Nam Định'),
-(20, 1, 2, 'SVCNTT08', 'Nguyễn Khắc Diêm', 'Nam', '1999-11-11', 'Thái Bình');
+(20, 1, 2, 'SVCNTT08', 'Nguyễn Khắc Diêm', 'Nam', '1999-11-11', 'Thái Bình'),
+(27, 1, 2, 'SVCNTT10', 'Nguyễn Thành Dự', 'Nam', '1996-02-16', 'Nam Định'),
+(28, 1, 2, 'SVCNTT11', 'Đỗ Mạnh Tuấn', 'Gay', '1999-05-05', 'Chương Mĩ'),
+(29, 1, 1, 'SVCNTT12', 'Lê Tuấn Mạnh', 'Nam', '1999-12-12', 'Chương Mĩ');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc đóng vai cho view `thongtingiangvien`
+-- (See below for the actual view)
+--
+CREATE TABLE `thongtingiangvien` (
+`idgiangvien` int(11)
+,`idkhoa` int(11)
+,`tengv` varchar(255)
+,`ngaysinh` date
+,`sdt` text
+,`email` varchar(255)
+,`tenkhoa` varchar(255)
+,`makhoa` varchar(255)
+,`tenmon` varchar(255)
+,`idmon` int(11)
+);
 
 -- --------------------------------------------------------
 
@@ -213,8 +264,10 @@ CREATE TABLE `tracuudiem` (
 `idsinhvien` int(11)
 ,`ten` varchar(255)
 ,`masv` varchar(255)
+,`idmon` int(11)
 ,`tenmon` varchar(255)
 ,`hocky` int(11)
+,`iddiem` int(11)
 ,`diemquatrinh` float
 ,`diemthi` float
 ,`diemtongket` float
@@ -233,6 +286,15 @@ CREATE TABLE `user` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `level` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc cho view `thongtingiangvien`
+--
+DROP TABLE IF EXISTS `thongtingiangvien`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `thongtingiangvien`  AS  select `giangvien`.`idgiangvien` AS `idgiangvien`,`giangvien`.`idkhoa` AS `idkhoa`,`giangvien`.`tengv` AS `tengv`,`giangvien`.`ngaysinh` AS `ngaysinh`,`giangvien`.`sdt` AS `sdt`,`giangvien`.`email` AS `email`,`khoa`.`tenkhoa` AS `tenkhoa`,`khoa`.`makhoa` AS `makhoa`,`monhoc`.`tenmon` AS `tenmon`,`monhoc`.`idmon` AS `idmon` from ((`giangvien` left join `monhoc` on(`giangvien`.`idgiangvien` = `monhoc`.`idgiangvien`)) left join `khoa` on(`giangvien`.`idkhoa` = `khoa`.`idkhoa`)) ;
 
 -- --------------------------------------------------------
 
@@ -259,7 +321,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `tracuudiem`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tracuudiem`  AS  select `sinhvien`.`idsinhvien` AS `idsinhvien`,`sinhvien`.`ten` AS `ten`,`sinhvien`.`masv` AS `masv`,`monhoc`.`tenmon` AS `tenmon`,`monhoc`.`hocky` AS `hocky`,`diem`.`diemquatrinh` AS `diemquatrinh`,`diem`.`diemthi` AS `diemthi`,`diem`.`diemtongket` AS `diemtongket`,`diem`.`diemchu` AS `diemchu` from ((`sinhvien` left join `diem` on(`sinhvien`.`idsinhvien` = `diem`.`idsinhvien`)) left join `monhoc` on(`monhoc`.`idmon` = `diem`.`idmon`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `tracuudiem`  AS  select `sinhvien`.`idsinhvien` AS `idsinhvien`,`sinhvien`.`ten` AS `ten`,`sinhvien`.`masv` AS `masv`,`monhoc`.`idmon` AS `idmon`,`monhoc`.`tenmon` AS `tenmon`,`monhoc`.`hocky` AS `hocky`,`diem`.`iddiem` AS `iddiem`,`diem`.`diemquatrinh` AS `diemquatrinh`,`diem`.`diemthi` AS `diemthi`,`diem`.`diemtongket` AS `diemtongket`,`diem`.`diemchu` AS `diemchu` from ((`sinhvien` left join `diem` on(`sinhvien`.`idsinhvien` = `diem`.`idsinhvien`)) left join `monhoc` on(`diem`.`idmon` = `monhoc`.`idmon`)) ;
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -269,8 +331,9 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Chỉ mục cho bảng `diem`
 --
 ALTER TABLE `diem`
-  ADD PRIMARY KEY (`idmon`),
-  ADD KEY `idsinhvien` (`idsinhvien`);
+  ADD PRIMARY KEY (`iddiem`),
+  ADD KEY `idsinhvien` (`idsinhvien`),
+  ADD KEY `idmon` (`idmon`);
 
 --
 -- Chỉ mục cho bảng `giangvien`
@@ -322,13 +385,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT cho bảng `diem`
 --
 ALTER TABLE `diem`
-  MODIFY `idmon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `iddiem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT cho bảng `giangvien`
 --
 ALTER TABLE `giangvien`
-  MODIFY `idgiangvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idgiangvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `khoa`
@@ -346,13 +409,13 @@ ALTER TABLE `lop`
 -- AUTO_INCREMENT cho bảng `monhoc`
 --
 ALTER TABLE `monhoc`
-  MODIFY `idmon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idmon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `idsinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `idsinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT cho bảng `user`
@@ -368,8 +431,8 @@ ALTER TABLE `user`
 -- Các ràng buộc cho bảng `diem`
 --
 ALTER TABLE `diem`
-  ADD CONSTRAINT `diem_ibfk_1` FOREIGN KEY (`idsinhvien`) REFERENCES `sinhvien` (`idsinhvien`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `diem_ibfk_2` FOREIGN KEY (`idmon`) REFERENCES `monhoc` (`idmon`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `diem_ibfk_1` FOREIGN KEY (`idmon`) REFERENCES `monhoc` (`idmon`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `diem_ibfk_2` FOREIGN KEY (`idsinhvien`) REFERENCES `sinhvien` (`idsinhvien`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `giangvien`
