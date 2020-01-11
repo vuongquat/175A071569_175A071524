@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 10, 2020 lúc 11:31 AM
+-- Thời gian đã tạo: Th1 11, 2020 lúc 06:26 AM
 -- Phiên bản máy phục vụ: 10.4.10-MariaDB
 -- Phiên bản PHP: 7.3.12
 
@@ -21,6 +21,44 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `quanlysinhvien`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc đóng vai cho view `danhsachlop1`
+-- (See below for the actual view)
+--
+CREATE TABLE `danhsachlop1` (
+`idlop` int(11)
+,`tenlop` varchar(255)
+,`idsinhvien` int(11)
+,`masv` varchar(255)
+,`ten` varchar(255)
+,`gioitinh` varchar(255)
+,`ngaysinh` date
+,`quequan` varchar(255)
+,`idkhoa` int(11)
+,`tenkhoa` varchar(255)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc đóng vai cho view `danhsachlop2`
+-- (See below for the actual view)
+--
+CREATE TABLE `danhsachlop2` (
+`idlop` int(11)
+,`tenlop` varchar(255)
+,`idsinhvien` int(11)
+,`masv` varchar(255)
+,`ten` varchar(255)
+,`gioitinh` varchar(255)
+,`ngaysinh` date
+,`quequan` varchar(255)
+,`idkhoa` int(11)
+,`tenkhoa` varchar(255)
+);
 
 -- --------------------------------------------------------
 
@@ -43,21 +81,20 @@ CREATE TABLE `diem` (
 --
 
 INSERT INTO `diem` (`iddiem`, `idmon`, `idsinhvien`, `diemquatrinh`, `diemthi`, `diemtongket`, `diemchu`) VALUES
-(1, 3, 1, 10, 6, 7.6, 'B'),
+(1, 3, 1, 10, 8, 8.8, 'A'),
 (2, 3, 2, 10, 10, 10, 'A'),
 (3, 4, 4, 5, 7, 6.2, 'C'),
-(4, 4, 15, 5, 10, 8, 'B'),
 (5, 4, 18, 8, 10, 9.2, 'A'),
-(6, 4, 19, 8, 9, 8.6, 'A'),
 (7, 4, 2, 10, 10, 10, 'A'),
 (10, 4, 20, 10, 8, 8.8, 'A'),
 (11, 3, 27, 10, 10, 10, 'A'),
 (13, 4, 1, 5, 10, 8, 'B'),
 (15, 3, 28, 4.5, 6.5, 5.7, 'C'),
 (16, 3, 4, 7.5, 9, 8.4, 'B'),
-(17, 4, 15, 10, 1, 4.6, 'D'),
 (20, 5, 1, 1, 1, 1, 'F'),
-(21, 5, 29, 10, 5, 7, 'B');
+(21, 5, 29, 10, 5, 7, 'B'),
+(23, 3, 29, 10, 10, 10, 'A'),
+(24, 4, 28, 10, 10, 10, 'A');
 
 --
 -- Bẫy `diem`
@@ -105,8 +142,8 @@ CREATE TABLE `giangvien` (
 --
 
 INSERT INTO `giangvien` (`idgiangvien`, `idkhoa`, `tengv`, `ngaysinh`, `sdt`, `email`) VALUES
-(7, 2, 'Nguyễn Văn Nam', '1990-01-24', '0981453628', 'nam@tlu.edu.vn'),
-(8, 1, 'Nguyễn Thị Hương', '1988-05-02', '0984125369', 'huong@tlu.edu.vn');
+(7, 1, 'Nguyễn Văn Nam', '1990-01-24', '0981453628', 'nam@tlu.edu.vn'),
+(9, 2, 'Nguyễn Thị Hương', '1988-02-01', '098456321', 'huong@tlu.edu.vn');
 
 -- --------------------------------------------------------
 
@@ -146,8 +183,7 @@ CREATE TABLE `lop` (
 
 INSERT INTO `lop` (`idlop`, `idkhoa`, `tenlop`) VALUES
 (1, 1, 'CNTT01'),
-(2, 1, 'CNTT02'),
-(3, 2, 'KT01');
+(2, 1, 'CNTT02');
 
 -- --------------------------------------------------------
 
@@ -197,9 +233,7 @@ INSERT INTO `sinhvien` (`idsinhvien`, `idkhoa`, `idlop`, `masv`, `ten`, `gioitin
 (1, 1, 1, ' SVCNTT01', 'Hoàng Thế Anh', 'Gay', '1999-12-24', ' Nghệ An'),
 (2, 1, 1, 'SVCNTT02', 'Trương Vương Quát', 'nam', '1999-12-18', 'Bắc Ninh'),
 (4, 1, 1, 'SVCNTT04', 'Đỗ Cảnh Dương', 'Nam', '1995-08-16', 'Nam Định'),
-(15, 2, 3, 'SVCNTT06', 'Lê Văn Bắc', 'Nữ', '1999-07-07', 'Thường Tín'),
 (18, 1, 2, 'SVCNTT07', 'Phạm Thế Sơn', 'Nam', '1999-07-07', 'Nam Định'),
-(19, 2, 3, 'SVKT01', 'Vũ Tiến Thành', 'Nam', '1998-01-01', 'Nam Định'),
 (20, 1, 2, 'SVCNTT08', 'Nguyễn Khắc Diêm', 'Nam', '1999-11-11', 'Thái Bình'),
 (27, 1, 2, 'SVCNTT10', 'Nguyễn Thành Dự', 'Nam', '1996-02-16', 'Nam Định'),
 (28, 1, 2, 'SVCNTT11', 'Đỗ Mạnh Tuấn', 'Gay', '1999-05-05', 'Chương Mĩ'),
@@ -282,10 +316,37 @@ CREATE TABLE `tracuudiem` (
 
 CREATE TABLE `user` (
   `iduser` int(11) NOT NULL,
-  `usernam` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `level` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `user`
+--
+
+INSERT INTO `user` (`iduser`, `username`, `password`, `level`) VALUES
+(1, 'vuongquat', '123456', 2),
+(3, 'theanh', '123456', 2),
+(4, 'nguyennam', '123456', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc cho view `danhsachlop1`
+--
+DROP TABLE IF EXISTS `danhsachlop1`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `danhsachlop1`  AS  select `lop`.`idlop` AS `idlop`,`lop`.`tenlop` AS `tenlop`,`sinhvien`.`idsinhvien` AS `idsinhvien`,`sinhvien`.`masv` AS `masv`,`sinhvien`.`ten` AS `ten`,`sinhvien`.`gioitinh` AS `gioitinh`,`sinhvien`.`ngaysinh` AS `ngaysinh`,`sinhvien`.`quequan` AS `quequan`,`khoa`.`idkhoa` AS `idkhoa`,`khoa`.`tenkhoa` AS `tenkhoa` from ((`lop` left join `sinhvien` on(`lop`.`idlop` = `sinhvien`.`idlop`)) left join `khoa` on(`lop`.`idkhoa` = `khoa`.`idkhoa`)) where `lop`.`tenlop` = 'CNTT01' ;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc cho view `danhsachlop2`
+--
+DROP TABLE IF EXISTS `danhsachlop2`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `danhsachlop2`  AS  select `lop`.`idlop` AS `idlop`,`lop`.`tenlop` AS `tenlop`,`sinhvien`.`idsinhvien` AS `idsinhvien`,`sinhvien`.`masv` AS `masv`,`sinhvien`.`ten` AS `ten`,`sinhvien`.`gioitinh` AS `gioitinh`,`sinhvien`.`ngaysinh` AS `ngaysinh`,`sinhvien`.`quequan` AS `quequan`,`khoa`.`idkhoa` AS `idkhoa`,`khoa`.`tenkhoa` AS `tenkhoa` from ((`lop` left join `sinhvien` on(`lop`.`idlop` = `sinhvien`.`idlop`)) left join `khoa` on(`lop`.`idkhoa` = `khoa`.`idkhoa`)) where `lop`.`tenlop` = 'CNTT02' ;
 
 -- --------------------------------------------------------
 
@@ -385,13 +446,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT cho bảng `diem`
 --
 ALTER TABLE `diem`
-  MODIFY `iddiem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `iddiem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT cho bảng `giangvien`
 --
 ALTER TABLE `giangvien`
-  MODIFY `idgiangvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idgiangvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT cho bảng `khoa`
@@ -421,7 +482,7 @@ ALTER TABLE `sinhvien`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
